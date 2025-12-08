@@ -35,46 +35,48 @@ def send_slack_notification(status, message):
     branch = os.environ.get('GITHUB_REF', 'unknown branch').split('/')[-1]
     commit_sha = os.environ.get('GITHUB_SHA', 'unknown')[:8]
     actor = os.environ.get('GITHUB_ACTOR', 'Unknown User')
+    workflow = os.environ.get('GITHUB_WORKFLOW', '')
+    run_id = os.environ.get('GITHUB_RUN_ID')
+    run_number = os.environ.get('GITHUB_RUN_NUMBER')
+    run_url = None
+    if repo and run_id:
+        run_url = f"https://github.com/{repo}/actions/runs/{run_id}"
     
     # Build the Slack message
-    slack_message = {
-        "attachments": [
-            {
-                "color": color,
-                "title": f"{status_emoji} CI Pipeline {status.upper()}",
-                "text": message,
-                "fields": [
-                    {
-                        "title": "Repository",
-                        "value": repo,
-                        "short": True
-                    },
-                    {
-                        "title": "Branch",
-                        "value": branch,
-                        "short": True
-                    },
-                    {
-                        "title": "Commit",
-                        "value": f"`{commit_sha}`",
-                        "short": True
-                    },
-                    {
-                        "title": "Triggered by",
-                        "value": actor,
-                        "short": True
-                    },
-                    {
-                        "title": "Timestamp",
-                        "value": datetime.now().isoformat(),
-                        "short": False
-                    }
-                ],
-                "footer": "To-Do List App CI",
-                "footer_icon": "https://platform.slack-edge.com/img/default_application_icon.png"
-            }
-        ]
-    }
+    fields = [
+        {"title": "Repository", "value": repo, "short": True},
+        {"title": "Branch", "value": branch, "short": True},
+        {"title": "Commit", "value": f"`{commit_sha}`", "short": True},
+        {"title": "Triggered by", "value": actor, "short": True},
+        {"title": "Timestamp", "value": datetime.now().isoformat(), "short": False}
+    ]
+
+    if workflow:
+        fields.insert(0, {"title": "Workflow", "value": workflow, "short": True})
+    if run_number:
+        fields.insert(1, {"title": "Run #", "value": run_number, "short": True})
+    if run_url:
+        # Add a clickable run link in the attachment
+        attachment = {
+            "color": color,
+            "title": f"{status_emoji} CI Pipeline {status.upper()}",
+            "title_link": run_url,
+            "text": message,
+            "fields": fields,
+            "footer": "To-Do List App CI",
+            "footer_icon": "https://platform.slack-edge.com/img/default_application_icon.png"
+        }
+    else:
+        attachment = {
+            "color": color,
+            "title": f"{status_emoji} CI Pipeline {status.upper()}",
+            "text": message,
+            "fields": fields,
+            "footer": "To-Do List App CI",
+            "footer_icon": "https://platform.slack-edge.com/img/default_application_icon.png"
+        }
+
+    slack_message = {"attachments": [attachment]}
     
     # Send the message
     try:

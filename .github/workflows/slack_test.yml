@@ -1,0 +1,46 @@
+name: Slack Notification Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      status:
+        description: 'Status to send (success|failure)'
+        required: true
+        default: 'success'
+        type: string
+      message:
+        description: 'Message to send'
+        required: true
+        default: 'Manual test from GitHub Actions'
+        type: string
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install requests
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+
+    - name: Send Slack notification
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        GITHUB_REF: ${{ github.ref }}
+        GITHUB_SHA: ${{ github.sha }}
+        GITHUB_ACTOR: ${{ github.actor }}
+        GITHUB_WORKFLOW: ${{ github.workflow }}
+        GITHUB_RUN_ID: ${{ github.run_id }}
+        GITHUB_RUN_NUMBER: ${{ github.run_number }}
+      run: |
+        python scripts/notify_slack.py --status "${{ github.event.inputs.status }}" --message "${{ github.event.inputs.message }}"
