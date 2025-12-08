@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - To-Do App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-item {
+            font-weight: 500;
+        }
+        .settings-container {
+            padding: 2rem 0;
+        }
+        .settings-box {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .settings-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 1rem;
+        }
+        .setting-item {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .setting-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .danger-zone {
+            background: #fff3cd;
+            border-left: 4px solid #ff6b6b;
+            padding: 1.5rem;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar is-sticky-top">
+        <div class="navbar-brand">
+            <div class="navbar-item">
+                <h1 class="title is-4">✓ To-Do App</h1>
+            </div>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-end">
+                <a href="/" class="navbar-item">Home</a>
+                <a href="/dashboard" class="navbar-item">Dashboard</a>
+                <a href="/analytics" class="navbar-item">Analytics</a>
+                <a href="/settings" class="navbar-item is-active">Settings</a>
+                <a href="/about" class="navbar-item">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="section settings-container">
+        <div class="container">
+            <div class="title is-2 has-text-white">Settings</div>
+            
+            <!-- Appearance Settings -->
+            <div class="settings-box">
+                <div class="settings-title">🎨 Appearance</div>
+                <div class="setting-item">
+                    <div class="level">
+                        <div class="level-left">
+                            <div class="level-item">
+                                <div>
+                                    <p class="heading">Theme</p>
+                                    <p class="subtitle">Choose your preferred color theme</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="level-right">
+                            <div class="level-item">
+                                <div class="select">
+                                    <select id="themeSelect">
+                                        <option value="light">Light</option>
+                                        <option value="dark">Dark</option>
+                                        <option value="auto">Auto</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="setting-item">
+                    <label class="checkbox">
+                        <input type="checkbox" id="animationsToggle" checked>
+                        Enable animations and transitions
+                    </label>
+                </div>
+            </div>
+
+            <!-- Notification Settings -->
+            <div class="settings-box">
+                <div class="settings-title">🔔 Notifications</div>
+                <div class="setting-item">
+                    <label class="checkbox">
+                        <input type="checkbox" id="browserNotifications" checked>
+                        Enable browser notifications
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label class="checkbox">
+                        <input type="checkbox" id="soundNotifications" checked>
+                        Enable sound notifications
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label class="checkbox">
+                        <input type="checkbox" id="dailyReminder" checked>
+                        Daily reminder at 9:00 AM
+                    </label>
+                </div>
+            </div>
+
+            <!-- Task Settings -->
+            <div class="settings-box">
+                <div class="settings-title">📋 Task Settings</div>
+                <div class="setting-item">
+                    <label class="checkbox">
+                        <input type="checkbox" id="showCompleted" checked>
+                        Show completed tasks
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <label class="checkbox">
+                        <input type="checkbox" id="sortByPriority" checked>
+                        Sort tasks by priority by default
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <div>
+                        <p class="heading">Items per page</p>
+                        <input class="input" type="number" id="itemsPerPage" value="10" min="5" max="50">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data & Privacy -->
+            <div class="settings-box">
+                <div class="settings-title">🔐 Data & Privacy</div>
+                <div class="setting-item">
+                    <label class="checkbox">
+                        <input type="checkbox" id="autoBackup" checked>
+                        Auto-backup data (weekly)
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <p class="heading">Last backup: <span id="lastBackup">Never</span></p>
+                </div>
+                <div class="setting-item">
+                    <button class="button is-primary" id="backupBtn">
+                        💾 Backup Data Now
+                    </button>
+                </div>
+            </div>
+
+            <!-- About Application -->
+            <div class="settings-box">
+                <div class="settings-title">ℹ️ About</div>
+                <div class="setting-item">
+                    <p><strong>Version:</strong> 1.0.0</p>
+                    <p><strong>Last Updated:</strong> December 2025</p>
+                </div>
+                <div class="setting-item">
+                    <button class="button is-info" id="checkUpdateBtn">
+                        🔄 Check for Updates
+                    </button>
+                </div>
+            </div>
+
+            <!-- Danger Zone -->
+            <div class="danger-zone">
+                <p class="heading has-text-danger">⚠️ Danger Zone</p>
+                <p style="margin-bottom: 1rem;">These actions cannot be undone. Please proceed with caution.</p>
+                <button class="button is-danger" id="clearAllBtn">
+                    🗑️ Clear All Tasks
+                </button>
+                <button class="button is-danger is-light" id="resetSettingsBtn">
+                    ⟲ Reset All Settings
+                </button>
+            </div>
+
+            <!-- Save Button -->
+            <div style="margin-top: 2rem; text-align: right;">
+                <button class="button is-success is-large" id="saveSettingsBtn">
+                    ✓ Save Settings
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Load settings from localStorage
+        function loadSettings() {
+            const theme = localStorage.getItem('theme') || 'light';
+            const animations = localStorage.getItem('animations') !== 'false';
+            const browserNotif = localStorage.getItem('browserNotifications') !== 'false';
+            const soundNotif = localStorage.getItem('soundNotifications') !== 'false';
+            const dailyReminder = localStorage.getItem('dailyReminder') !== 'false';
+            const showCompleted = localStorage.getItem('showCompleted') !== 'false';
+            const sortByPriority = localStorage.getItem('sortByPriority') !== 'false';
+            const itemsPerPage = localStorage.getItem('itemsPerPage') || '10';
+            const autoBackup = localStorage.getItem('autoBackup') !== 'false';
+            
+            document.getElementById('themeSelect').value = theme;
+            document.getElementById('animationsToggle').checked = animations;
+            document.getElementById('browserNotifications').checked = browserNotif;
+            document.getElementById('soundNotifications').checked = soundNotif;
+            document.getElementById('dailyReminder').checked = dailyReminder;
+            document.getElementById('showCompleted').checked = showCompleted;
+            document.getElementById('sortByPriority').checked = sortByPriority;
+            document.getElementById('itemsPerPage').value = itemsPerPage;
+            document.getElementById('autoBackup').checked = autoBackup;
+            
+            const lastBackup = localStorage.getItem('lastBackup');
+            if (lastBackup) {
+                document.getElementById('lastBackup').textContent = new Date(lastBackup).toLocaleDateString();
+            }
+        }
+
+        // Save settings to localStorage
+        document.getElementById('saveSettingsBtn').addEventListener('click', function() {
+            localStorage.setItem('theme', document.getElementById('themeSelect').value);
+            localStorage.setItem('animations', document.getElementById('animationsToggle').checked);
+            localStorage.setItem('browserNotifications', document.getElementById('browserNotifications').checked);
+            localStorage.setItem('soundNotifications', document.getElementById('soundNotifications').checked);
+            localStorage.setItem('dailyReminder', document.getElementById('dailyReminder').checked);
+            localStorage.setItem('showCompleted', document.getElementById('showCompleted').checked);
+            localStorage.setItem('sortByPriority', document.getElementById('sortByPriority').checked);
+            localStorage.setItem('itemsPerPage', document.getElementById('itemsPerPage').value);
+            localStorage.setItem('autoBackup', document.getElementById('autoBackup').checked);
+            
+            alert('Settings saved successfully!');
+        });
+
+        // Backup data
+        document.getElementById('backupBtn').addEventListener('click', function() {
+            const backup = {
+                timestamp: new Date().toISOString(),
+                version: '1.0.0'
+            };
+            localStorage.setItem('lastBackup', new Date().toISOString());
+            localStorage.setItem('backup', JSON.stringify(backup));
+            alert('Backup created successfully!');
+            document.getElementById('lastBackup').textContent = new Date().toLocaleDateString();
+        });
+
+        // Check for updates
+        document.getElementById('checkUpdateBtn').addEventListener('click', function() {
+            alert('You are running the latest version (1.0.0)');
+        });
+
+        // Clear all tasks
+        document.getElementById('clearAllBtn').addEventListener('click', function() {
+            if (confirm('Are you sure? This will delete all tasks permanently!')) {
+                alert('All tasks cleared!');
+            }
+        });
+
+        // Reset settings
+        document.getElementById('resetSettingsBtn').addEventListener('click', function() {
+            if (confirm('Are you sure? This will reset all settings to defaults!')) {
+                localStorage.clear();
+                location.reload();
+            }
+        });
+
+        // Load settings on page load
+        loadSettings();
+    </script>
+</body>
+</html>

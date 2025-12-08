@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - To-Do App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-item {
+            font-weight: 500;
+        }
+        .analytics-container {
+            padding: 2rem 0;
+        }
+        .chart-box {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .chart-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+        
+        canvas {
+            max-height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar is-sticky-top">
+        <div class="navbar-brand">
+            <div class="navbar-item">
+                <h1 class="title is-4">✓ To-Do App</h1>
+            </div>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-end">
+                <a href="/" class="navbar-item">Home</a>
+                <a href="/dashboard" class="navbar-item">Dashboard</a>
+                <a href="/analytics" class="navbar-item is-active">Analytics</a>
+                <a href="/settings" class="navbar-item">Settings</a>
+                <a href="/about" class="navbar-item">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="section analytics-container">
+        <div class="container">
+            <div class="title is-2 has-text-white">Analytics</div>
+            
+            <!-- Priority Distribution -->
+            <div class="columns">
+                <div class="column is-6">
+                    <div class="chart-box">
+                        <div class="chart-title">Priority Distribution</div>
+                        <canvas id="priorityChart"></canvas>
+                    </div>
+                </div>
+                <div class="column is-6">
+                    <div class="chart-box">
+                        <div class="chart-title">Task Completion Status</div>
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Breakdown -->
+            <div class="chart-box">
+                <div class="chart-title">Tasks by Category</div>
+                <canvas id="categoryChart"></canvas>
+            </div>
+
+            <!-- Insights -->
+            <div class="chart-box">
+                <div class="chart-title">Quick Insights</div>
+                <div id="insights"></div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        let priorityChart, statusChart, categoryChart;
+
+        async function loadAnalytics() {
+            try {
+                const response = await fetch('/api/tasks/stats');
+                const stats = await response.json();
+                
+                // Destroy existing charts if they exist
+                if (priorityChart) priorityChart.destroy();
+                if (statusChart) statusChart.destroy();
+                if (categoryChart) categoryChart.destroy();
+                
+                // Priority Chart
+                const priorityCtx = document.getElementById('priorityChart').getContext('2d');
+                priorityChart = new Chart(priorityCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['High', 'Medium', 'Low'],
+                        datasets: [{
+                            data: [
+                                stats.priority_breakdown.high,
+                                stats.priority_breakdown.medium,
+                                stats.priority_breakdown.low
+                            ],
+                            backgroundColor: ['#ff6b6b', '#ffa500', '#51cf66'],
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 15,
+                                    font: { size: 12 }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Status Chart
+                const statusCtx = document.getElementById('statusChart').getContext('2d');
+                statusChart = new Chart(statusCtx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Completed', 'Pending'],
+                        datasets: [{
+                            data: [stats.completed_tasks, stats.pending_tasks],
+                            backgroundColor: ['#51cf66', '#ffa500'],
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    padding: 15,
+                                    font: { size: 12 }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Category Chart
+                const categories = Object.keys(stats.categories);
+                const categoryCounts = categories.map(cat => stats.categories[cat].total);
+                const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+                categoryChart = new Chart(categoryCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: categories,
+                        datasets: [{
+                            label: 'Number of Tasks',
+                            data: categoryCounts,
+                            backgroundColor: '#667eea',
+                            borderColor: '#667eea',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    stepSize: 1
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    padding: 15,
+                                    font: { size: 12 }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Insights
+                generateInsights(stats);
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+            }
+        }
+
+        function generateInsights(stats) {
+            const insights = document.getElementById('insights');
+            let html = '<div class="content">';
+            
+            if (stats.total_tasks === 0) {
+                html += '<p>No tasks yet. Start by creating your first task!</p>';
+            } else {
+                const avgPerCategory = (stats.total_tasks / Object.keys(stats.categories).length).toFixed(1);
+                const mostPressedCategory = Object.entries(stats.categories).reduce((a, b) => 
+                    b[1].total > a[1].total ? b : a
+                )[0];
+                
+                html += `
+                    <ul>
+                        <li><strong>Productivity:</strong> You've completed ${stats.completed_tasks} out of ${stats.total_tasks} tasks (${stats.completion_rate}%)</li>
+                        <li><strong>Pending Work:</strong> You have ${stats.pending_tasks} task${stats.pending_tasks !== 1 ? 's' : ''} still in progress</li>
+                        <li><strong>Priority Focus:</strong> ${stats.priority_breakdown.high} high-priority task${stats.priority_breakdown.high !== 1 ? 's' : ''} need${stats.priority_breakdown.high !== 1 ? '' : 's'} attention</li>
+                        <li><strong>Most Active Category:</strong> ${mostPressedCategory} with ${stats.categories[mostPressedCategory].total} task${stats.categories[mostPressedCategory].total !== 1 ? 's' : ''}</li>
+                        <li><strong>Average Tasks Per Category:</strong> ${avgPerCategory} tasks</li>
+                    </ul>
+                `;
+            }
+            
+            html += '</div>';
+            insights.innerHTML = html;
+        }
+
+        loadAnalytics();
+        // Refresh analytics every 30 seconds
+        setInterval(loadAnalytics, 30000);
+    </script>
+</body>
+</html>

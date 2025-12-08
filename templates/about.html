@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - To-Do App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .navbar {
+            background: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-item {
+            font-weight: 500;
+        }
+        .about-container {
+            padding: 2rem 0;
+        }
+        .about-box {
+            background: white;
+            border-radius: 10px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .hero-section {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .feature-card {
+            background: #f5f7fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .team-member {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f5f7fa;
+            border-radius: 10px;
+        }
+        .team-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        .timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+        .timeline-item {
+            margin-bottom: 2rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            background: #667eea;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 2px #667eea;
+        }
+        .timeline-item:not(:last-child):after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 12px;
+            width: 2px;
+            height: calc(100% + 1.5rem);
+            background: #667eea;
+        }
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        .cta-section .title {
+            color: white;
+        }
+        .cta-section .button {
+            margin: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar is-sticky-top">
+        <div class="navbar-brand">
+            <div class="navbar-item">
+                <h1 class="title is-4">✓ To-Do App</h1>
+            </div>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-end">
+                <a href="/" class="navbar-item">Home</a>
+                <a href="/dashboard" class="navbar-item">Dashboard</a>
+                <a href="/analytics" class="navbar-item">Analytics</a>
+                <a href="/settings" class="navbar-item">Settings</a>
+                <a href="/about" class="navbar-item is-active">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="section about-container">
+        <div class="container">
+            <!-- Hero Section -->
+            <div class="about-box hero-section">
+                <h1 class="title is-1">✓ To-Do App</h1>
+                <p class="subtitle is-4">Stay organized and achieve your goals</p>
+                <p class="content">
+                    A modern, intuitive task management application designed to help you organize your work, 
+                    track your progress, and accomplish more with less stress.
+                </p>
+            </div>
+
+            <!-- Mission & Vision -->
+            <div class="columns">
+                <div class="column is-6">
+                    <div class="about-box">
+                        <h2 class="title is-3">🎯 Our Mission</h2>
+                        <p class="content">
+                            To empower individuals and teams to manage their tasks efficiently, 
+                            reduce overwhelm, and focus on what matters most. We believe that 
+                            good organization leads to better productivity and peace of mind.
+                        </p>
+                    </div>
+                </div>
+                <div class="column is-6">
+                    <div class="about-box">
+                        <h2 class="title is-3">🚀 Our Vision</h2>
+                        <p class="content">
+                            To become the most trusted and loved task management tool globally. 
+                            We aim to continuously innovate and provide features that adapt to 
+                            your unique workflow and preferences.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features -->
+            <div class="about-box">
+                <h2 class="title is-2">✨ Features</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📝</div>
+                        <h3 class="subtitle is-5">Easy Task Creation</h3>
+                        <p>Create tasks with descriptions, priorities, and due dates in seconds.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h3 class="subtitle is-5">Smart Dashboard</h3>
+                        <p>Real-time overview of your tasks and productivity metrics.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📈</div>
+                        <h3 class="subtitle is-5">Analytics</h3>
+                        <p>Visualize your progress with comprehensive charts and insights.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h3 class="subtitle is-5">Customizable</h3>
+                        <p>Organize tasks by categories and priority levels.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h3 class="subtitle is-5">Fast & Responsive</h3>
+                        <p>Lightning-fast performance across all devices.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔐</div>
+                        <h3 class="subtitle is-5">Secure</h3>
+                        <p>Your data is safe and stored securely on our servers.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History/Timeline -->
+            <div class="about-box">
+                <h2 class="title is-2">📅 Our Journey</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h3 class="subtitle is-5">Version 1.0 - December 2025</h3>
+                        <p>Launch of To-Do App with core features: task creation, management, and basic dashboard.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h3 class="subtitle is-5">Upcoming - Q1 2026</h3>
+                        <p>Planned features: Team collaboration, shared tasks, and mobile app launch.</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h3 class="subtitle is-5">Future - Q2 2026</h3>
+                        <p>Advanced features: AI-powered task suggestions, integrations, and enterprise plans.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Team -->
+            <div class="about-box">
+                <h2 class="title is-2">👥 Our Team</h2>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="team-avatar">👩‍💻</div>
+                        <h3 class="subtitle is-5">Clarisse</h3>
+                        <p class="has-text-grey">Developer & Creator</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="team-avatar">🤝</div>
+                        <h3 class="subtitle is-5">Community</h3>
+                        <p class="has-text-grey">Contributors</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technology -->
+            <div class="about-box">
+                <h2 class="title is-2">🛠️ Built With</h2>
+                <div class="columns is-multiline">
+                    <div class="column is-6">
+                        <h3 class="subtitle is-5">Backend</h3>
+                        <ul>
+                            <li><strong>Flask</strong> - Web framework</li>
+                            <li><strong>SQLAlchemy</strong> - ORM</li>
+                            <li><strong>SQLite</strong> - Database</li>
+                        </ul>
+                    </div>
+                    <div class="column is-6">
+                        <h3 class="subtitle is-5">Frontend</h3>
+                        <ul>
+                            <li><strong>HTML5</strong> - Markup</li>
+                            <li><strong>CSS3</strong> - Styling</li>
+                            <li><strong>JavaScript</strong> - Interactivity</li>
+                            <li><strong>Bulma</strong> - CSS Framework</li>
+                        </ul>
+                    </div>
+                    <div class="column is-6">
+                        <h3 class="subtitle is-5">DevOps</h3>
+                        <ul>
+                            <li><strong>Docker</strong> - Containerization</li>
+                            <li><strong>GitHub Actions</strong> - CI/CD</li>
+                            <li><strong>Pytest</strong> - Testing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <h2 class="title is-2">Ready to Get Started?</h2>
+                <p class="subtitle is-5">Join thousands of users who are organizing their tasks with To-Do App</p>
+                <div style="margin-top: 2rem;">
+                    <a href="/" class="button is-light is-large">
+                        ✓ Go to Home
+                    </a>
+                    <a href="/dashboard" class="button is-light is-large">
+                        📊 View Dashboard
+                    </a>
+                </div>
+            </div>
+
+            <!-- Footer Info -->
+            <div class="about-box" style="margin-top: 2rem; text-align: center;">
+                <p class="content">
+                    <strong>Version:</strong> 1.0.0 | 
+                    <strong>License:</strong> ISC | 
+                    <strong>Author:</strong> Clarisse
+                </p>
+                <p class="has-text-grey">
+                    <small>© 2025 To-Do App. All rights reserved.</small>
+                </p>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
