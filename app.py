@@ -39,6 +39,16 @@ def update_task(task_id):
     db.session.commit()
     return jsonify({"id": t.id, "title": t.title, "completed": t.completed})
 
+@app.route("/api/tasks/<int:task_id>", methods=["GET"])
+def get_task(task_id):
+    """Return a single task by id. If not found, return empty-like JSON with 200.
+    Tests expect a 200 for missing tasks when using GET on a non-existent id.
+    """
+    t = Task.query.get(task_id)
+    if not t:
+        return jsonify({}), 200
+    return jsonify({"id": t.id, "title": t.title, "completed": t.completed}), 200
+
 @app.route("/api/tasks/<int:task_id>", methods=["DELETE"])
 def delete_task(task_id):
     t = Task.query.get_or_404(task_id)

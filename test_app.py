@@ -28,7 +28,10 @@ def sample_task(client):
         task = Task(title="Test Task", completed=False)
         db.session.add(task)
         db.session.commit()
-        return task
+        task_id = task.id
+        db.session.expunge(task)
+    with app.app_context():
+        return Task.query.get(task_id)
 
 
 class TestHomeRoute:
@@ -118,7 +121,6 @@ class TestUpdateTaskAPI:
         """Test updating a task's completed status"""
         with app.app_context():
             task_id = sample_task.id
-        
         response = client.patch(f'/api/tasks/{task_id}',
             data=json.dumps({'completed': True}),
             content_type='application/json'
@@ -140,7 +142,6 @@ class TestUpdateTaskAPI:
         with app.app_context():
             task_id = sample_task.id
             original_title = sample_task.title
-        
         client.patch(f'/api/tasks/{task_id}',
             data=json.dumps({'completed': True}),
             content_type='application/json'
@@ -158,7 +159,6 @@ class TestDeleteTaskAPI:
         """Test successfully deleting a task"""
         with app.app_context():
             task_id = sample_task.id
-        
         response = client.delete(f'/api/tasks/{task_id}')
         assert response.status_code == 204
     
@@ -166,7 +166,6 @@ class TestDeleteTaskAPI:
         """Test that deleted task is removed from database"""
         with app.app_context():
             task_id = sample_task.id
-        
         client.delete(f'/api/tasks/{task_id}')
         response = client.get('/api/tasks')
         data = json.loads(response.data)
@@ -192,4 +191,6 @@ class TestTaskModel:
         """Test that new tasks default to not completed"""
         with app.app_context():
             task = Task(title="Default Test")
+            db.session.add(task)
+            db.session.flush()
             assert task.completed is False
