@@ -112,20 +112,20 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
-        if: ${{ secrets.DOCKER_HUB_USERNAME != '' }}
+        if: ${{ secrets.DOCKER_HUB_USERNAME }}
       
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
-          push: ${{ secrets.DOCKER_HUB_USERNAME != '' }}
+          push: true
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/todo-app:${{ needs.create-release.outputs.version }}
             ${{ secrets.DOCKER_HUB_USERNAME }}/todo-app:latest
           labels: |
             org.opencontainers.image.version=${{ needs.create-release.outputs.version }}
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
-        if: ${{ secrets.DOCKER_HUB_USERNAME != '' }}
+        if: ${{ secrets.DOCKER_HUB_USERNAME }}
       
       - name: Build Docker image (local only)
         uses: docker/build-push-action@v5
@@ -133,7 +133,7 @@ jobs:
           context: .
           load: true
           tags: todo-app:${{ needs.create-release.outputs.version }}
-        if: ${{ secrets.DOCKER_HUB_USERNAME == '' }}
+        if: ${{ !secrets.DOCKER_HUB_USERNAME }}
 
   create-github-release:
     needs: [create-release, build-docker]
@@ -194,7 +194,7 @@ jobs:
                 }
               ]
             }
-        if: ${{ secrets.SLACK_WEBHOOK_URL != '' && success() }}
+        if: ${{ secrets.SLACK_WEBHOOK_URL && success() }}
       
       - name: Notify Slack (Release Failed)
         uses: slackapi/slack-github-action@v1.24.0
@@ -213,4 +213,4 @@ jobs:
                 }
               ]
             }
-        if: ${{ secrets.SLACK_WEBHOOK_URL != '' && failure() }}
+        if: ${{ secrets.SLACK_WEBHOOK_URL && failure() }}
